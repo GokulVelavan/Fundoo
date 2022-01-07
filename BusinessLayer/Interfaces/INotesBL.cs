@@ -16,6 +16,11 @@ namespace BusinessLayer.Interfaces
 
         void DeleteNote(long noteId);
         Notes UpdateNotes(long NoteId, Notes notes);
+         void ChangeColor(Color_Model color, long Id);
+        void Trashing(long Id);
+        void Pinning(long Id);
+        void Archiving(long Id);
+
 
     }
 }

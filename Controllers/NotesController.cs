@@ -83,6 +83,68 @@ namespace Fundoo3.Controllers
                 return this.BadRequest(new { Success = false, message = e.Message });
             }
         }
+        [Authorize]
+        [HttpPut("Color")]
+        public IActionResult Change_Color( Color_Model color,long Id)
+        {
+            try
+            {
+                this.notesBL.ChangeColor(color, Id);       
+               
+                return Ok(new { Success = true, message = "Color Updated" });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+        [HttpPut("Trash")]
+        public IActionResult Trash_Notes( long Id)
+        {
+            try
+            {
+                this.notesBL.Trashing(Id);
+
+                return Ok(new { Success = true, message = " Operation is Updated" });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+
+        [HttpPut("Pinning")]
+        public IActionResult Pinning_Notes(long Id)
+        {
+            try
+            {
+                this.notesBL.Pinning(Id);
+
+                return Ok(new { Success = true, message = " Operation is Updated" });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+        [HttpPut("Archive")]
+        public IActionResult Archive_Notes(long Id)
+        {
+            try
+            {
+                this.notesBL.Archiving(Id);
+
+                return Ok(new { Success = true, message = " Operation is updated" });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
     }
 }
  

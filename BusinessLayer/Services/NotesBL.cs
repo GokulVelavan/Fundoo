@@ -67,6 +67,51 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
-        
+        public void ChangeColor(Color_Model color, long Id)
+        {
+            try
+            {
+                 this.notesRL.ChangeColor( color,  Id);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public void Trashing(long Id)
+        {
+            try
+            {
+                this.notesRL.Trashing( Id);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+       public void Pinning(long Id)
+        {
+            try
+            {
+                this.notesRL.Pinning(Id);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+       public void Archiving(long Id)
+        {
+            try
+            {
+                this.notesRL.Archiving(Id);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

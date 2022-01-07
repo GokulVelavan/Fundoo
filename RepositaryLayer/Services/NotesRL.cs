@@ -103,5 +103,70 @@ namespace RepositaryLayer.Services
                 throw;
             }
         }
+        public void ChangeColor(Color_Model color, long Id)
+        {
+            try
+            {
+                var User = this.context.Note.FirstOrDefault(e => (e.Id == Id  && (e.Color != color.Color)));
+                if (User != null)
+                {
+                     User.Color= color.Color;
+                    this.context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void Trashing( long Id)
+        {
+            try
+            {
+                var User = this.context.Note.FirstOrDefault(e => (e.Id == Id));
+                if (User != null)
+                {
+                    User.IsTrash = !User.IsTrash;
+                    this.context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void Pinning(long Id)
+        {
+            try
+            {
+                var User = this.context.Note.FirstOrDefault(e => (e.Id == Id));
+                if (User != null)
+                {
+                    User.IsPin = !User.IsPin;
+                    this.context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+       
+             public void Archiving(long Id)
+        {
+            try
+            {
+                var User = this.context.Note.FirstOrDefault(e => (e.Id == Id));
+                if (User != null)
+                {
+                    User.IsArchive = !User.IsArchive;
+                    this.context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
