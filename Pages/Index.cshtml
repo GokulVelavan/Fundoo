@@ -1,0 +1,26 @@
+﻿@page "ResetPassword"
+@model CommonLayer.Model.ResetPassword
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width-device-width"/>
+      <title>Reset Password</title>
+
+</head>
+<body>
+    <h1>Reset Password</h1>
+    <form action="/api/users/restpassword" method="post">
+        <h1>New Password</h1>
+        <input type="password" name="NewPassword" />
+        <h1>Confirm Password</h1>
+        <input type="password" name="ConfirmPassword" />
+        <input type="submit" value="Reset" />
+
+
+    </form>
+</body>
+</html>
