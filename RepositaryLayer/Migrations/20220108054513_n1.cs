@@ -41,27 +41,55 @@ namespace RepositaryLayer.Migrations
                     IsTrash = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    User = table.Column<long>(type: "bigint", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Note", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Note_User_User",
-                        column: x => x.User,
+                        name: "FK_Note_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Collabrator",
+                columns: table => new
+                {
+                    Collaborator_Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Notes_Id = table.Column<long>(type: "bigint", nullable: false),
+                    Collaborated_Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collabrator", x => x.Collaborator_Id);
+                    table.ForeignKey(
+                        name: "FK_Collabrator_Note_Notes_Id",
+                        column: x => x.Notes_Id,
+                        principalTable: "Note",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Note_User",
+                name: "IX_Collabrator_Notes_Id",
+                table: "Collabrator",
+                column: "Notes_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Note_UserId",
                 table: "Note",
-                column: "User");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Collabrator");
+
             migrationBuilder.DropTable(
                 name: "Note");
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
 using CommonLayer.Model;
@@ -18,7 +19,6 @@ namespace Fundoo3.Controllers
         {
             this.notesBL = notesBL;
         }
-        [Authorize]
         [HttpPost]
         public IActionResult AddingNotes(UserNotes notes)
         {
@@ -26,6 +26,7 @@ namespace Fundoo3.Controllers
             {
                 if (this.notesBL.AddNotes(notes))
                 {
+                    long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
                     return this.Ok(new { Success = true, message = "Notes Added Successful" });
                 }
                 else

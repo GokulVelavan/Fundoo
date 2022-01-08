@@ -32,6 +32,8 @@ namespace RepositaryLayer.Services
                 newNotes.IsPin = notes.IsPin;
                 newNotes.IsTrash = notes.IsTrash;
                 newNotes.CreatedAt = DateTime.Now;
+                newNotes.UserId = notes.UserId;
+               // newNotes.UserId= Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
                 this.context.Note.Add(newNotes);
                 int result = this.context.SaveChanges();
                 if (result > 0)

@@ -19,6 +19,26 @@ namespace RepositaryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("RepositaryLayer.Entity.Collabrators", b =>
+                {
+                    b.Property<long>("Collaborator_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Collaborated_Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Notes_Id")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Collaborator_Id");
+
+                    b.HasIndex("Notes_Id");
+
+                    b.ToTable("Collabrator");
+                });
+
             modelBuilder.Entity("RepositaryLayer.Entity.Notes", b =>
                 {
                     b.Property<long>("Id")
@@ -60,12 +80,12 @@ namespace RepositaryLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("User")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("User");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Note");
                 });
@@ -105,11 +125,24 @@ namespace RepositaryLayer.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("RepositaryLayer.Entity.Collabrators", b =>
+                {
+                    b.HasOne("RepositaryLayer.Entity.Notes", "Notes")
+                        .WithMany()
+                        .HasForeignKey("Notes_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notes");
+                });
+
             modelBuilder.Entity("RepositaryLayer.Entity.Notes", b =>
                 {
                     b.HasOne("RepositaryLayer.Entity.Users", "Users")
                         .WithMany("Note")
-                        .HasForeignKey("User");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Users");
                 });

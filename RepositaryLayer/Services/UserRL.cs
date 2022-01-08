@@ -77,7 +77,7 @@ namespace RepositaryLayer.Services
             try
             {
 
-                var Login = this.context.User.Where(details => details.Email == user.Email && details.Password == user.Password).FirstOrDefault();
+                var Login = this.context.User.Where(details => details.Email == user.Email && details.Password == PasswordEncrypting(user.Password)).FirstOrDefault();
                 if (Login == null)
                 {
 

@@ -42,6 +42,8 @@ namespace Fundoo3
             services.AddTransient<INotesBL, NotesBL>();
             services.AddTransient<INotesRL, NotesRL>();
             services.AddTransient<IMailService, MailService>();
+            services.AddTransient<ICollabratorBL, CollabratorBL>();
+            services.AddTransient<ICollabratorRL, CollabratorRL>();
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:UsersAppDB"]));
             services.AddRazorPages();
             services.AddControllers().AddNewtonsoftJson();

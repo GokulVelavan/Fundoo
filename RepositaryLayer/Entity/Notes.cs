@@ -47,8 +47,8 @@ namespace RepositaryLayer.Entity
 
         [DataType(DataType.DateTime)]
         public DateTime? ModifiedAt { get; set; }
-
-        [ForeignKey("User")]
+        public long UserId { get; set; }
+        [ForeignKey("UserId")]
         public Users Users { get; set; }
 
     }

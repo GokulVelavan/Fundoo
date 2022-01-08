@@ -17,5 +17,7 @@ namespace RepositaryLayer.Context
         } 
         public DbSet<Users> User { get; set; }
         public DbSet<Notes> Note { get; set; }
+        public DbSet<Collabrators> Collabrator { get; set; }
+
     }
-    }
+}
