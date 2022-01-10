@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
 using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using RepositaryLayer.Entity;
 
 namespace Fundoo3.Controllers
@@ -14,20 +18,36 @@ namespace Fundoo3.Controllers
     public class NotesController : ControllerBase
     {
         INotesBL notesBL;
+        public static IWebHostEnvironment environment;
 
-        public NotesController(INotesBL notesBL)
+        public NotesController(INotesBL notesBL, IWebHostEnvironment _environment)
         {
             this.notesBL = notesBL;
+           environment = _environment;
         }
         [HttpPost]
-        public IActionResult AddingNotes(UserNotes notes)
+        public IActionResult AddingNotes([FromForm]UserNotes notes)
         {
             try
             {
-                if (this.notesBL.AddNotes(notes))
+            string _path= @"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
+                var files = HttpContext.Request.Form.Files;
+              //  if (files != null && files.Count > 0) {
+                //    foreach (var file in files) {
+                        FileInfo fi = new FileInfo(notes.Image.FileName);
+                        //   var newfilename = "Image_" + DateTime.Now.TimeOfDay.Milliseconds + fi.Extension;
+                        string gg = fi.FullName;
+                // var path = Path.Combine(environment.ContentRootFileProvider);
+              
+              
+                    // System.Web.Hosting.HostingEnvironment.MapPath( environment.ContentRootPath);
+                //       } }
+                if (this.notesBL.AddNotes(notes,_path))
                 {
-                    long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                    return this.Ok(new { Success = true, message = "Notes Added Successful" });
+                    //long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                    
+                    return this.Ok(new { Success = true, message = notes.Image });
+                    
                 }
                 else
                 {

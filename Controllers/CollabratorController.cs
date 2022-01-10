@@ -29,10 +29,10 @@ namespace Fundoo3.Controllers
             {
                 if (this.CollabratorBL.Notes_User(User))
                 {
-                    return this.Ok(new { Status = true, Message = "Note Shared successfully" });
+                    return this.Ok(new { Status = true, Message = "User added successfully" });
                 }
 
-                return this.BadRequest(new { Status = false, Message = "You Do not have permission" });
+                return this.BadRequest(new { Status = false, Message = "Cant add User" });
             }
             catch (Exception ex)
             {

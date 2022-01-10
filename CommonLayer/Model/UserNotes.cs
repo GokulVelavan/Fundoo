@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace CommonLayer.Model
 {
@@ -30,11 +31,11 @@ namespace CommonLayer.Model
         public string Color { get; set; }
 
         [Required(ErrorMessage = "Image is required")]
-        [DataType(DataType.Text)]
         [Display(Name = "Image:")]
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
 
-     
+
+
         public bool IsArchive { get; set; }
 
         

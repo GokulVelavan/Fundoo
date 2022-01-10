@@ -45,7 +45,6 @@ namespace Fundoo3
             services.AddTransient<ICollabratorBL, CollabratorBL>();
             services.AddTransient<ICollabratorRL, CollabratorRL>();
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:UsersAppDB"]));
-            services.AddRazorPages();
             services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
@@ -113,7 +112,6 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             app.UseAuthorization();
                 app.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapRazorPages();
                     endpoints.MapControllers();
                 });
             }

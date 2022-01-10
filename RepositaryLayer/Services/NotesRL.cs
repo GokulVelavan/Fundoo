@@ -7,6 +7,8 @@ using CommonLayer.ResponseModel;
 using Microsoft.EntityFrameworkCore;
 using RepositaryLayer.Context;
 using RepositaryLayer.Entity;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using RepositaryLayer.Interfaces;
 
 namespace RepositaryLayer.Services
@@ -18,16 +20,39 @@ namespace RepositaryLayer.Services
         {
             this.context = contxt;
         }
-      public bool AddNotes(UserNotes notes) 
+        Account account = new Account(
+   "mycloud302",
+   "683273417252222",
+   "fcpJoReO8s7LapjgNXkkG9wZbSs");
+
+        public bool AddNotes(UserNotes notes, string _path) 
         {
             try
             {
+                string imagePath =@"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
+             
+
+
+            //public const CLOUD_NAME= "";
+            //public const API_KEY= "";
+            //public const API_SECRET= "";
+
+          
+
+        Cloudinary cloudinary = new Cloudinary(account);
+           
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(_path)
+                };
+            var uploadResult = cloudinary.Upload(uploadParams);
+           
                 Notes newNotes = new Notes();
                 newNotes.Title = notes.Title;
                 newNotes.Message = notes.Message;
                 newNotes.Remainder = notes.Remainder;
                 newNotes.Color = notes.Color;
-                newNotes.Image = notes.Image;
+                newNotes.Image = uploadResult.Url.ToString();
                 newNotes.IsArchive = notes.IsArchive;
                 newNotes.IsPin = notes.IsPin;
                 newNotes.IsTrash = notes.IsTrash;
@@ -47,7 +72,7 @@ namespace RepositaryLayer.Services
             }
             catch(Exception e)
             {
-                throw e;
+                throw ;
             }
         }
         public async Task<List<NotesResponse>> NotesData()
@@ -166,6 +191,27 @@ namespace RepositaryLayer.Services
                 }
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string DeleteImage()
+        {
+            try
+            {
+
+                string ImagePath =@"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
+
+                Cloudinary cloudinary = new Cloudinary(account);
+                var deletionParams = new DeletionParams(ImagePath)
+                {
+                    PublicId = ImagePath
+                };
+                var deletionResult = cloudinary.Destroy(deletionParams);
+
+                return "sss";
+            }catch(Exception e)
             {
                 throw;
             }

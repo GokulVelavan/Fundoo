@@ -11,7 +11,7 @@ namespace RepositaryLayer.Interfaces
 {
     public interface INotesRL
     {
-       bool AddNotes(UserNotes notes);
+       bool AddNotes(UserNotes notes, string _path);
         Task<List<NotesResponse>> NotesData();
 
        void DeleteNote(long noteId);
