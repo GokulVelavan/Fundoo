@@ -44,7 +44,6 @@ namespace CommonLayer.Model
        
         public bool IsTrash { get; set; }
 
-        public long UserId { get; set; }
 
 
     }

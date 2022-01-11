@@ -32,11 +32,41 @@ namespace RepositaryLayer.Migrations
                     b.Property<long>("Notes_Id")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("User_Id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Collaborator_Id");
 
                     b.HasIndex("Notes_Id");
 
+                    b.HasIndex("User_Id");
+
                     b.ToTable("Collabrator");
+                });
+
+            modelBuilder.Entity("RepositaryLayer.Entity.Lables", b =>
+                {
+                    b.Property<long>("Lable_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Lable")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Notes_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("User_Id")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Lable_Id");
+
+                    b.HasIndex("Notes_Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("Lables");
                 });
 
             modelBuilder.Entity("RepositaryLayer.Entity.Notes", b =>
@@ -55,6 +85,9 @@ namespace RepositaryLayer.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image_Id")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsArchive")
@@ -128,12 +161,39 @@ namespace RepositaryLayer.Migrations
             modelBuilder.Entity("RepositaryLayer.Entity.Collabrators", b =>
                 {
                     b.HasOne("RepositaryLayer.Entity.Notes", "Notes")
-                        .WithMany()
+                        .WithMany("Collabrators")
                         .HasForeignKey("Notes_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RepositaryLayer.Entity.Users", "Users")
+                        .WithMany("Collabrators")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Notes");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("RepositaryLayer.Entity.Lables", b =>
+                {
+                    b.HasOne("RepositaryLayer.Entity.Notes", "Notes")
+                        .WithMany("Lables")
+                        .HasForeignKey("Notes_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RepositaryLayer.Entity.Users", "Users")
+                        .WithMany("Lables")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notes");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("RepositaryLayer.Entity.Notes", b =>
@@ -147,8 +207,19 @@ namespace RepositaryLayer.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("RepositaryLayer.Entity.Notes", b =>
+                {
+                    b.Navigation("Collabrators");
+
+                    b.Navigation("Lables");
+                });
+
             modelBuilder.Entity("RepositaryLayer.Entity.Users", b =>
                 {
+                    b.Navigation("Collabrators");
+
+                    b.Navigation("Lables");
+
                     b.Navigation("Note");
                 });
 #pragma warning restore 612, 618

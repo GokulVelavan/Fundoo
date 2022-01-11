@@ -40,10 +40,12 @@ namespace Fundoo3
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<INotesBL, NotesBL>();
-            services.AddTransient<INotesRL, NotesRL>();
+            services.AddTransient<INotesRL, NotesRL>(); 
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<ICollabratorBL, CollabratorBL>();
             services.AddTransient<ICollabratorRL, CollabratorRL>();
+            services.AddTransient<ILableBL, LableBL>();
+            services.AddTransient<ILableRL, LableRL>();
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:UsersAppDB"]));
             services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>

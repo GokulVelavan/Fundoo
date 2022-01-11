@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace RepositaryLayer.Entity
 {
-    public class Collabrators
+   public class Lables
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Collaborator_Id { get; set; }
+        public long Lable_Id { get; set; }
+
 
         public long Notes_Id { get; set; }
         [ForeignKey("Notes_Id")]
@@ -24,7 +24,8 @@ namespace RepositaryLayer.Entity
         [ForeignKey("User_Id")]
         public Users Users { get; set; }
 
-        [DataType(DataType.EmailAddress)]
-        public string Collaborated_Email { get; set; }
+
+        [DataType(DataType.Text)]
+        public string Lable { get; set; }
     }
 }

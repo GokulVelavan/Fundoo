@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
 using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fundoo3.Controllers
@@ -20,13 +17,13 @@ namespace Fundoo3.Controllers
         {
             this.CollabratorBL = CollabratorBL;
         }
-        [Authorize]
 
         [HttpPost]
         public IActionResult Add_User(Collabrator_Model User)
         {
             try
             {
+               // long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
                 if (this.CollabratorBL.Notes_User(User))
                 {
                     return this.Ok(new { Status = true, Message = "User added successfully" });

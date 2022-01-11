@@ -42,7 +42,9 @@ namespace RepositaryLayer.Entity
         [DataType(DataType.DateTime)]
         public DateTime? ModifiedAt { get; set; }
 
-        public ICollection<Notes> Note { get; set; }
+        public  ICollection<Notes> Note { get; set; }
+        public  ICollection<Collabrators> Collabrators { get; set; }
+        public  ICollection<Lables> Lables { get; set; }
 
     }
 }

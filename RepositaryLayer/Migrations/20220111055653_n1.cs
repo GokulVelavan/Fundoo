@@ -36,6 +36,7 @@ namespace RepositaryLayer.Migrations
                     Remainder = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image_Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsArchive = table.Column<bool>(type: "bit", nullable: false),
                     IsPin = table.Column<bool>(type: "bit", nullable: false),
                     IsTrash = table.Column<bool>(type: "bit", nullable: false),
@@ -61,6 +62,7 @@ namespace RepositaryLayer.Migrations
                     Collaborator_Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Notes_Id = table.Column<long>(type: "bigint", nullable: false),
+                    User_Id = table.Column<long>(type: "bigint", nullable: false),
                     Collaborated_Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -71,13 +73,61 @@ namespace RepositaryLayer.Migrations
                         column: x => x.Notes_Id,
                         principalTable: "Note",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Collabrator_User_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lables",
+                columns: table => new
+                {
+                    Lable_Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Notes_Id = table.Column<long>(type: "bigint", nullable: false),
+                    User_Id = table.Column<long>(type: "bigint", nullable: false),
+                    Lable = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lables", x => x.Lable_Id);
+                    table.ForeignKey(
+                        name: "FK_Lables_Note_Notes_Id",
+                        column: x => x.Notes_Id,
+                        principalTable: "Note",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Lables_User_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Collabrator_Notes_Id",
                 table: "Collabrator",
                 column: "Notes_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collabrator_User_Id",
+                table: "Collabrator",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lables_Notes_Id",
+                table: "Lables",
+                column: "Notes_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lables_User_Id",
+                table: "Lables",
+                column: "User_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Note_UserId",
@@ -89,6 +139,9 @@ namespace RepositaryLayer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Collabrator");
+
+            migrationBuilder.DropTable(
+                name: "Lables");
 
             migrationBuilder.DropTable(
                 name: "Note");

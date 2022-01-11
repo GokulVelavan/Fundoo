@@ -38,6 +38,8 @@ namespace RepositaryLayer.Entity
         [DataType(DataType.Text)]
         [Display(Name = "Image:")]
         public string Image { get; set; }       
+
+        public string Image_Id { get; set; }
         public bool IsArchive { get; set; }       
         public bool IsPin { get; set; }        
         public bool IsTrash { get; set; }
@@ -51,5 +53,7 @@ namespace RepositaryLayer.Entity
         [ForeignKey("UserId")]
         public Users Users { get; set; }
 
+        public ICollection<Collabrators> Collabrators { get; set; }
+        public  ICollection<Lables> Lables { get; set; }
     }
 }

@@ -25,20 +25,10 @@ namespace RepositaryLayer.Services
    "683273417252222",
    "fcpJoReO8s7LapjgNXkkG9wZbSs");
 
-        public bool AddNotes(UserNotes notes, string _path) 
+        public bool AddNotes(UserNotes notes, long jwtUserId, string _path) 
         {
             try
             {
-                string imagePath =@"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
-             
-
-
-            //public const CLOUD_NAME= "";
-            //public const API_KEY= "";
-            //public const API_SECRET= "";
-
-          
-
         Cloudinary cloudinary = new Cloudinary(account);
            
                 var uploadParams = new ImageUploadParams()
@@ -53,12 +43,12 @@ namespace RepositaryLayer.Services
                 newNotes.Remainder = notes.Remainder;
                 newNotes.Color = notes.Color;
                 newNotes.Image = uploadResult.Url.ToString();
+                newNotes.Image_Id = uploadResult.PublicId;
                 newNotes.IsArchive = notes.IsArchive;
                 newNotes.IsPin = notes.IsPin;
                 newNotes.IsTrash = notes.IsTrash;
                 newNotes.CreatedAt = DateTime.Now;
-                newNotes.UserId = notes.UserId;
-               // newNotes.UserId= Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                newNotes.UserId= jwtUserId;
                 this.context.Note.Add(newNotes);
                 int result = this.context.SaveChanges();
                 if (result > 0)

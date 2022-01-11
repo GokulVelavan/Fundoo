@@ -15,9 +15,37 @@ namespace RepositaryLayer.Context
         {
 
         } 
+      
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Collabrators>()
+                .HasKey(e => new { e.Collaborator_Id });
+            modelBuilder.Entity<Collabrators>()
+                .HasOne(e => e.Notes)
+                .WithMany(e => e.Collabrators)
+                .HasForeignKey(e => e.Notes_Id);
+            modelBuilder.Entity<Collabrators>()
+                .HasOne(e =>e.Users )
+                .WithMany(e => e.Collabrators)
+                .HasForeignKey(e => e.User_Id);
+
+            modelBuilder.Entity<Lables>()
+                .HasKey(e => new { e.Lable_Id });
+            modelBuilder.Entity<Lables>()
+                .HasOne(e => e.Notes)
+                .WithMany(e => e.Lables)
+                .HasForeignKey(e => e.Notes_Id);
+            modelBuilder.Entity<Lables>()
+                .HasOne(e => e.Users)
+                .WithMany(e => e.Lables)
+                .HasForeignKey(e => e.User_Id);
+
+        }
         public DbSet<Users> User { get; set; }
         public DbSet<Notes> Note { get; set; }
         public DbSet<Collabrators> Collabrator { get; set; }
+        public DbSet<Lables> Lables { get; set; }
+
 
     }
 }

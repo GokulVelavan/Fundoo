@@ -30,21 +30,24 @@ namespace Fundoo3.Controllers
         {
             try
             {
-            string _path= @"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
-                var files = HttpContext.Request.Form.Files;
-              //  if (files != null && files.Count > 0) {
-                //    foreach (var file in files) {
-                        FileInfo fi = new FileInfo(notes.Image.FileName);
-                        //   var newfilename = "Image_" + DateTime.Now.TimeOfDay.Milliseconds + fi.Extension;
-                        string gg = fi.FullName;
-                // var path = Path.Combine(environment.ContentRootFileProvider);
-              
-              
-                    // System.Web.Hosting.HostingEnvironment.MapPath( environment.ContentRootPath);
-                //       } }
-                if (this.notesBL.AddNotes(notes,_path))
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);//Autharize User Id taken from JWT Claims
+
+                if (notes.Image.FileName!=null)
                 {
-                    //long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                    if(!Directory.Exists(environment.WebRootPath+"\\Upload\\"))
+                    {
+                        Directory.CreateDirectory(environment.WebRootPath + "\\Upload\\");
+                    }
+                    using(FileStream fileStream=System.IO.File.Create(environment.WebRootPath + "\\Upload\\"+notes.Image.FileName))
+                    {
+                        notes.Image.CopyTo(fileStream);
+                        fileStream.Flush();
+                        
+                    }
+                }
+                
+                if (this.notesBL.AddNotes(notes,  jwtUserId, environment.WebRootPath + "\\Upload\\" + notes.Image.FileName))
+                {
                     
                     return this.Ok(new { Success = true, message = notes.Image });
                     

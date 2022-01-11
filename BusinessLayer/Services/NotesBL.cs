@@ -20,11 +20,11 @@ namespace BusinessLayer.Services
             this.notesRL = notesRL;
         }
 
-        public bool AddNotes(UserNotes notes,string _path)
+        public bool AddNotes(UserNotes notes, long jwtUserId, string _path)
         {
             try
             {
-                return this.notesRL.AddNotes(notes,_path);
+                return this.notesRL.AddNotes(notes, jwtUserId, _path);
             }catch(Exception e)
             {
                 throw;

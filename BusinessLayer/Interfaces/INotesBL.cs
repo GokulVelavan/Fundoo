@@ -11,7 +11,7 @@ namespace BusinessLayer.Interfaces
 {
     public interface INotesBL
     {
-         bool AddNotes(UserNotes notes, string _path);
+         bool AddNotes(UserNotes notes, long jwtUserId, string _path);
         Task<List<NotesResponse>> NotesData();
 
         void DeleteNote(long noteId);
