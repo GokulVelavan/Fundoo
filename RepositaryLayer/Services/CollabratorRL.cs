@@ -27,6 +27,7 @@ namespace RepositaryLayer.Services
                 Collabrators New_User = new Collabrators();
                     New_User.Notes_Id = User.Notes_Id;
                     New_User.Collaborated_Email = User.Collaborated_Email;
+                  //  New_User.User_Id=
                     this.context.Collabrator.Add(New_User);
                 }
                 int result = this.context.SaveChanges();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
 using CommonLayer.Model;
+using RepositaryLayer.Entity;
 using RepositaryLayer.Interfaces;
 
 namespace BusinessLayer.Services
@@ -23,6 +24,19 @@ namespace BusinessLayer.Services
             {
                 return this.lableRL.AddLable(User_id, _label);
                
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public void DeleteLable(long Id, long jwtUserId)
+        {
+            try
+            {
+                 this.lableRL.DeleteLable( Id,  jwtUserId);
+
             }
             catch (Exception e)
             {

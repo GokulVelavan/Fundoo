@@ -33,5 +33,20 @@ namespace Fundoo3.Controllers
                 return BadRequest(new { Success = false, Message = "Cant addlable" });
             }
         }
+        [HttpDelete]
+        public IActionResult RemoveLable(long Id)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+                lableBL.DeleteLable( Id, jwtUserId);
+                return Ok(new { Success = true, message = "Lable is added" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = "Cant addlable" });
+            }
+        }
     }
 }

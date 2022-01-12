@@ -48,8 +48,8 @@ namespace Fundoo3.Controllers
                 
                 if (this.notesBL.AddNotes(notes,  jwtUserId, environment.WebRootPath + "\\Upload\\" + notes.Image.FileName))
                 {
-                    
-                    return this.Ok(new { Success = true, message = notes.Image });
+                    var som = notes.Image.OpenReadStream();
+                    return this.Ok(new { Success = true, message = "Notes added"  });
                     
                 }
                 else

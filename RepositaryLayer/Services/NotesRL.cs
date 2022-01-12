@@ -186,22 +186,25 @@ namespace RepositaryLayer.Services
             }
         }
 
-        public string DeleteImage()
+        public string DeleteImage(long Note_Id)
         {
             try
             {
+                Notes data = new Notes();
 
-                string ImagePath =@"C:\Users\INFINITY\Pictures\Camera Roll\WIN_20211016_09_06_29_Pro.jpg";
 
-                Cloudinary cloudinary = new Cloudinary(account);
-                var deletionParams = new DeletionParams(ImagePath)
-                {
-                    PublicId = ImagePath
-                };
-                var deletionResult = cloudinary.Destroy(deletionParams);
+                //var Data = this.context.Note.Where(e => e.Id == Note_Id);
+
+                //Cloudinary cloudinary = new Cloudinary(account);
+                //var deletionParams = new DeletionParams()
+                //{
+                //    PublicId = Da
+                //};
+                //var deletionResult = cloudinary.Destroy(deletionParams);
 
                 return "sss";
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw;
             }

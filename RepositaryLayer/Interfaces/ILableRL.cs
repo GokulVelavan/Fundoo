@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommonLayer.Model;
+using RepositaryLayer.Entity;
 
 namespace RepositaryLayer.Interfaces
 {
    public  interface ILableRL
     {
         Lable_Model AddLable(long User_id, Lable_Model _label);
+        public void DeleteLable(long Id, long jwtUserId);
+
     }
 }
