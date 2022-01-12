@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace CommonLayer.ResponseModel
 {
-    class LabelResponse
+    public class LabelResponse
     {
+        public long Lable_Id { get; set; }
+        public long Notes_Id { get; set; }
+        public long User_Id { get; set; }
+        public string Lable_Name { get; set; }
     }
 }

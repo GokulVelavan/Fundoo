@@ -10,4 +10,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\Collabrator_Model\" />
+    <Folder Include="Model\Label_Model\" />
+    <Folder Include="Model\Notes_Model\" />
+    <Folder Include="Model\User_Model\" />
+  </ItemGroup>
+
 </Project>

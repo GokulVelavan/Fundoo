@@ -65,5 +65,22 @@ namespace RepositaryLayer.Services
                 throw;
             }
         }
+        public Lables GetLablesById(long lable_Id, long jwtUserId)
+        {
+            try
+            {
+                var Data = this.context.User.Where(e => e.Id == jwtUserId);
+                if (Data != null)
+                {
+                    return this.context.Lables.FirstOrDefault(e => e.Lable_Id == lable_Id);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

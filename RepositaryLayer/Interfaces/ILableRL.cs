@@ -13,5 +13,7 @@ namespace RepositaryLayer.Interfaces
         Lable_Model AddLable(long User_id, Lable_Model _label);
         public void DeleteLable(long Id, long jwtUserId);
 
+        public Lables GetLablesById(long lable_Id, long jwtUserId);
+
     }
 }

@@ -48,5 +48,22 @@ namespace Fundoo3.Controllers
                 return BadRequest(new { Success = false, Message = "Cant addlable" });
             }
         }
+
+        [HttpGet]
+
+        public IActionResult GetLableById(long Id)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+                var data=lableBL.GetLablesById(Id,jwtUserId);
+                return Ok(new { Success = true, message = "Lable is fetched successfull",data });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, Message = "Cant addlable" });
+            }
+        }
     }
 }

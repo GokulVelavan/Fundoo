@@ -44,5 +44,18 @@ namespace BusinessLayer.Services
             }
         }
 
+        public Lables GetLablesById(long lable_Id, long jwtUserId)
+        {
+            try
+            {
+                return this.lableRL.GetLablesById( lable_Id,  jwtUserId);
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
     }
 }

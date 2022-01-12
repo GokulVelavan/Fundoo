@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CommonLayer.ResponseModel
 {
-    class ImageResponse
+    public class ImageResponse
     {
+        public string Image { get; set; }
     }
 }
