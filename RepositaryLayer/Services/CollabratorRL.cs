@@ -17,7 +17,7 @@ namespace RepositaryLayer.Services
         {
             this.context = contxt;
         }
-        public bool Notes_User(Collabrator_Model User)
+        public bool Notes_User(Collabrator_Model User,long User_Id)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace RepositaryLayer.Services
                 Collabrators New_User = new Collabrators();
                     New_User.Notes_Id = User.Notes_Id;
                     New_User.Collaborated_Email = User.Collaborated_Email;
-                  //  New_User.User_Id=
+                    New_User.User_Id = User_Id;
                     this.context.Collabrator.Add(New_User);
                 }
                 int result = this.context.SaveChanges();

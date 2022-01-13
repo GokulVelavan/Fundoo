@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using CommonLayer.Model;
 using CommonLayer.ResponseModel;
 using Microsoft.EntityFrameworkCore;
 using RepositaryLayer.Context;
 using RepositaryLayer.Entity;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using RepositaryLayer.Interfaces;
 
 namespace RepositaryLayer.Services
@@ -25,7 +25,14 @@ namespace RepositaryLayer.Services
    "683273417252222",
    "fcpJoReO8s7LapjgNXkkG9wZbSs");
 
-        public bool AddNotes(UserNotes notes, long jwtUserId, string _path) 
+
+        /// <summary>
+        /// Creation of the notes
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public Notes AddNotes(UserNotes notes, long jwtUserId, string _path) 
         {
             try
             {
@@ -35,6 +42,7 @@ namespace RepositaryLayer.Services
                 {
                     File = new FileDescription(_path)
                 };
+
             var uploadResult = cloudinary.Upload(uploadParams);
            
                 Notes newNotes = new Notes();
@@ -53,11 +61,11 @@ namespace RepositaryLayer.Services
                 int result = this.context.SaveChanges();
                 if (result > 0)
                 {
-                    return true;
+                    return newNotes;//Returning the created notes as a response
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
             catch(Exception e)
@@ -65,11 +73,16 @@ namespace RepositaryLayer.Services
                 throw ;
             }
         }
-        public async Task<List<NotesResponse>> NotesData()
+
+
+        /// <summary> Gets all notes/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public async Task<List<UserNotesResponse>> NotesData()
         {
 
             var records = await this.context.Note.Select(
-               data=> new NotesResponse()
+               data=> new UserNotesResponse()
                 {
                  Color = data.Color,
             Title = data.Title,
@@ -83,44 +96,135 @@ namespace RepositaryLayer.Services
             Id=data.Id
         }).ToListAsync();
 
-            return records;
+            return records; //returning all the notes created
         }
-
-        public void DeleteNote(long noteId)
-        {
-            var notes = new Notes() { Id=noteId };
-            this.context.Note.Remove(notes);
-
-            context.SaveChanges();
-
-        }
-
-        public Notes UpdateNotes(long NoteId, Notes notes)
+        /// <summary> Gets all notes of the Particular User/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public  UserNotesResponse NotesDataWithId(long User_Id)
         {
             try
             {
-                var note = this.context.Note.FirstOrDefault(x => x.Id == NoteId);
-                if (note != null)
+                var data = this.context.Note.FirstOrDefault(e => e.UserId == User_Id);
+                UserNotesResponse records = new UserNotesResponse()
                 {
-                    note.Color = notes.Color;
-                    note.Title = notes.Title;
-                    note.Image = notes.Image;
-                    note.Message = notes.Message;
-                    note.IsArchive = notes.IsArchive;
-                    note.IsPin = notes.IsPin;
-                    note.IsTrash = notes.IsTrash;
-                    note.CreatedAt = (DateTime)notes.CreatedAt;
-                    note.Remainder = notes.Remainder;
-                    this.context.SaveChanges();
+                    Color = data.Color,
+                    Title = data.Title,
+                    Image = data.Image,
+                    Message = data.Message,
+                    IsArchive = data.IsArchive,
+                    IsPin = data.IsPin,
+                    IsTrash = data.IsTrash,
+                    CreatedAt = (DateTime)data.CreatedAt,
+                    Remainder = data.Remainder,
+                    Id = data.Id
+                };
 
-                }
-                return note;
-            }catch(Exception e)
+                return records; //returning all the notes created
+            }
+            catch (Exception e)
             {
                 throw;
             }
         }
-        public void ChangeColor(Color_Model color, long Id)
+
+        /// <summary>
+        /// Get the indugual note with Id.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse GetingleNoteWithId(long notesId, long jwtUserId)
+        {
+            try
+            {
+                var User1 = this.context.User.Where(e => e.Id == jwtUserId);
+                if (User1 != null)
+                {
+                    var User= context.Note.FirstOrDefault(i => (i.Id == notesId) && (i.Id == jwtUserId));
+                 UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title=User.Title,
+                        Message=User.Message,
+                        ModifiedAt= (DateTime)User.ModifiedAt,
+                        CreatedAt= (DateTime)User.CreatedAt,
+                        IsPin=User.IsPin,
+                        IsArchive=User.IsArchive,
+                        IsTrash=User.IsTrash,
+                        Image=User.Image,
+                        Image_Id=User.Image_Id,
+                        Color=User.Color,
+                        Remainder=User.Remainder,
+                    };
+                    return model;
+                }
+                return null;
+       
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        /// <summary> Delete note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public void DeleteNote(long noteId,long User_Id)
+        {
+            try
+            {
+                var notes = new Notes() { Id = noteId, UserId = User_Id };
+                this.context.Note.Remove(notes);
+                context.SaveChanges();
+            }catch(Exception e)
+            {
+                throw;
+            }
+
+        }
+        /// <summary> Update note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse UpdateNotes(long NoteId, Notes notes)
+        {
+            try
+            {
+                var User = this.context.Note.FirstOrDefault(x => x.Id == NoteId);
+                if (User != null)
+                {
+                    User.Title = notes.Title;
+                    User.Message = notes.Message;
+                    this.context.SaveChanges();
+
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title = User.Title,
+                        Message = User.Message,
+                        ModifiedAt = (DateTime)User.ModifiedAt,
+                        CreatedAt = (DateTime)User.CreatedAt,
+                        IsPin = User.IsPin,
+                        IsArchive = User.IsArchive,
+                        IsTrash = User.IsTrash,
+                        Image = User.Image,
+                        Image_Id = User.Image_Id,
+                        Color = User.Color,
+                        Remainder = User.Remainder,
+                    };
+                    return model;
+                }
+                return null;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
+        /// <summary> change color note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse ChangeColor( long Id, Color_Model color)
         {
             try
             {
@@ -129,14 +233,34 @@ namespace RepositaryLayer.Services
                 {
                      User.Color= color.Color;
                     this.context.SaveChanges();
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title = User.Title,
+                        Message = User.Message,
+                        ModifiedAt = (DateTime)User.ModifiedAt,
+                        CreatedAt = (DateTime)User.CreatedAt,
+                        IsPin = User.IsPin,
+                        IsArchive = User.IsArchive,
+                        IsTrash = User.IsTrash,
+                        Image = User.Image,
+                        Image_Id = User.Image_Id,
+                        Color = User.Color,
+                        Remainder = User.Remainder,
+                    };
+                    return model;
                 }
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public void Trashing( long Id)
+        /// <summary> Trashing note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse Trashing( long Id)
         {
             try
             {
@@ -145,14 +269,34 @@ namespace RepositaryLayer.Services
                 {
                     User.IsTrash = !User.IsTrash;
                     this.context.SaveChanges();
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title = User.Title,
+                        Message = User.Message,
+                        ModifiedAt = (DateTime)User.ModifiedAt,
+                        CreatedAt = (DateTime)User.CreatedAt,
+                        IsPin = User.IsPin,
+                        IsArchive = User.IsArchive,
+                        IsTrash = User.IsTrash,
+                        Image = User.Image,
+                        Image_Id = User.Image_Id,
+                        Color = User.Color,
+                        Remainder = User.Remainder,
+                    };
+                    return model;
                 }
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public void Pinning(long Id)
+        /// <summary> Pinning note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse Pinning(long Id)
         {
             try
             {
@@ -161,48 +305,121 @@ namespace RepositaryLayer.Services
                 {
                     User.IsPin = !User.IsPin;
                     this.context.SaveChanges();
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title = User.Title,
+                        Message = User.Message,
+                        ModifiedAt = (DateTime)User.ModifiedAt,
+                        CreatedAt = (DateTime)User.CreatedAt,
+                        IsPin = User.IsPin,
+                        IsArchive = User.IsArchive,
+                        IsTrash = User.IsTrash,
+                        Image = User.Image,
+                        Image_Id = User.Image_Id,
+                        Color = User.Color,
+                        Remainder = User.Remainder,
+                    };
+                    return model;
                 }
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-       
-             public void Archiving(long Id)
+        /// <summary> Archiving note/// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse Archiving(long Id)
         {
             try
             {
                 var User = this.context.Note.FirstOrDefault(e => (e.Id == Id));
+                
                 if (User != null)
                 {
                     User.IsArchive = !User.IsArchive;
                     this.context.SaveChanges();
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title = User.Title,
+                        Message = User.Message,
+                        ModifiedAt = (DateTime)User.ModifiedAt,
+                        CreatedAt = (DateTime)User.CreatedAt,
+                        IsPin = User.IsPin,
+                        IsArchive = User.IsArchive,
+                        IsTrash = User.IsTrash,
+                        Image = User.Image,
+                        Image_Id = User.Image_Id,
+                        Color = User.Color,
+                        Remainder = User.Remainder,
+                    };
+                    return model;
                 }
+                return null;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
-        public string DeleteImage(long Note_Id)
+        /// <summary>
+        /// Image note.
+        /// </summary>
+        /// <param name="notesId">The notes identifier.</param>
+        /// <param name="imageNotes">The image notes.</param>
+        /// <param name="image">The image.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UserNotesResponse UpdateImage(long Note_Id,string _Path)
         {
             try
             {
-                Notes data = new Notes();
+                var User = this.context.Note.FirstOrDefault(e => e.Id == Note_Id);
+                if(User!=null)
+                {
+                    string UserImage_Id = User.Image_Id;
+                    //Code to delete the already uploaded image in cloud
+                    Cloudinary cloudinary = new Cloudinary(account);
+                    var deletionParams = new DeletionParams(UserImage_Id)
+                    {
+                        PublicId = UserImage_Id
+                    };
+                    var deletionResult = cloudinary.Destroy(deletionParams);
 
 
-                //var Data = this.context.Note.Where(e => e.Id == Note_Id);
+                    //code to add the new image in cloud
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(_Path)
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
 
-                //Cloudinary cloudinary = new Cloudinary(account);
-                //var deletionParams = new DeletionParams()
-                //{
-                //    PublicId = Da
-                //};
-                //var deletionResult = cloudinary.Destroy(deletionParams);
-
-                return "sss";
+                    //updating the database
+                    User.Image = uploadResult.Url.ToString();
+                    User.Image_Id = uploadResult.PublicId;
+                    this.context.SaveChanges();
+                    UserNotesResponse model = new UserNotesResponse()
+                    {
+                        Id = User.Id,
+                        Title=User.Title,
+                        Message=User.Message,
+                        ModifiedAt= (DateTime)User.ModifiedAt,
+                        CreatedAt= (DateTime)User.CreatedAt,
+                        IsPin=User.IsPin,
+                        IsArchive=User.IsArchive,
+                        IsTrash=User.IsTrash,
+                        Image=User.Image,
+                        Image_Id=User.Image_Id,
+                        Color=User.Color,
+                        Remainder=User.Remainder,
+                    };
+                    return model;
+                }
+                return null;
             }
             catch (Exception e)
             {

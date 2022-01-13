@@ -23,8 +23,10 @@ namespace Fundoo3.Controllers
         {
             try
             {
-               // long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                if (this.CollabratorBL.Notes_User(User))
+                long jwtUserId = 1;
+                    //Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+                if (this.CollabratorBL.Notes_User(User, jwtUserId))
                 {
                     return this.Ok(new { Status = true, Message = "User added successfully" });
                 }

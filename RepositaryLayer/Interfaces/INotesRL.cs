@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommonLayer.Model;
 using CommonLayer.ResponseModel;
@@ -11,15 +8,16 @@ namespace RepositaryLayer.Interfaces
 {
     public interface INotesRL
     {
-       bool AddNotes(UserNotes notes, long jwtUserId, string _path);
-        Task<List<NotesResponse>> NotesData();
-
-       void DeleteNote(long noteId);
-        Notes UpdateNotes(long NoteId, Notes notes);
-        void ChangeColor(Color_Model color, long Id);
-        void Trashing(long Id);
-        void Pinning(long Id);
-        void Archiving(long Id);
-
+        public Notes AddNotes(UserNotes notes, long jwtUserId, string _path);
+        public Task<List<UserNotesResponse>> NotesData();
+        public UserNotesResponse NotesDataWithId(long User_Id);
+        public UserNotesResponse GetingleNoteWithId(long notesId, long jwtUserId);
+        public void DeleteNote(long noteId, long User_Id);
+        public UserNotesResponse UpdateNotes(long NoteId, Notes notes);
+        public UserNotesResponse ChangeColor(long Id, Color_Model color);
+        public UserNotesResponse Trashing(long Id);
+        public UserNotesResponse Pinning(long Id);
+        public UserNotesResponse Archiving(long Id);
+        public UserNotesResponse UpdateImage(long Note_Id, string _Path);
     }
 }

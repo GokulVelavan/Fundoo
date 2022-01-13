@@ -17,11 +17,11 @@ namespace BusinessLayer.Services
         {
             this.collabratorRL = collabratorRL; ;
         }
-       public bool Notes_User(Collabrator_Model User)
+       public bool Notes_User(Collabrator_Model User, long User_Id)
         {
             try
             {
-                return this.collabratorRL.Notes_User(User);
+                return this.collabratorRL.Notes_User(User,User_Id);
             }
             catch (Exception e)
             {

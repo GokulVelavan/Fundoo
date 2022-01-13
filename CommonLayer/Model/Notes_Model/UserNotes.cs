@@ -35,7 +35,6 @@ namespace CommonLayer.Model
         public IFormFile Image { get; set; }
 
 
-
         public bool IsArchive { get; set; }
 
         

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
 using CommonLayer.Model;
@@ -11,28 +9,29 @@ using RepositaryLayer.Interfaces;
 
 namespace BusinessLayer.Services
 {
-    public class NotesBL:INotesBL
+    public class NotesBL : INotesBL
     {
         INotesRL notesRL;
-        
+
         public NotesBL(INotesRL notesRL)
         {
             this.notesRL = notesRL;
         }
 
-        public bool AddNotes(UserNotes notes, long jwtUserId, string _path)
+
+        public Notes AddNotes(UserNotes notes, long jwtUserId, string _path)
         {
             try
             {
                 return this.notesRL.AddNotes(notes, jwtUserId, _path);
-            }catch(Exception e)
+            } catch (Exception e)
             {
                 throw;
             }
         }
-      
-        public  Task<List<NotesResponse>> NotesData()
-        
+
+        public Task<List<UserNotesResponse>> NotesData()
+
         {
             try
             {
@@ -44,11 +43,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public void DeleteNote(long noteId)
+        public void DeleteNote(long noteId, long User_Id)
         {
             try
             {
-                 this.notesRL.DeleteNote(noteId);
+                this.notesRL.DeleteNote(noteId, User_Id);
             }
             catch (Exception e)
             {
@@ -56,22 +55,24 @@ namespace BusinessLayer.Services
             }
         }
 
-       public Notes UpdateNotes(long NoteId, Notes notes)
+        public UserNotesResponse UpdateNotes(long NoteId, Notes notes)
         {
             try
             {
-             return this.notesRL.UpdateNotes(NoteId,notes);
+                return this.notesRL.UpdateNotes(NoteId, notes);
             }
             catch (Exception e)
             {
                 throw;
             }
         }
-        public void ChangeColor(Color_Model color, long Id)
+        public UserNotesResponse ChangeColor(long Id, Color_Model color)
         {
             try
             {
-                 this.notesRL.ChangeColor( color,  Id);
+                return this.notesRL.ChangeColor(Id, color);
+
+
             }
             catch (Exception e)
             {
@@ -79,11 +80,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public void Trashing(long Id)
+        public UserNotesResponse Trashing(long Id)
         {
             try
             {
-                this.notesRL.Trashing( Id);
+                return this.notesRL.Trashing(Id);
             }
             catch (Exception e)
             {
@@ -91,27 +92,62 @@ namespace BusinessLayer.Services
             }
         }
 
-       public void Pinning(long Id)
+        public UserNotesResponse Pinning(long Id)
         {
             try
             {
-                this.notesRL.Pinning(Id);
+                return this.notesRL.Pinning(Id);
             }
             catch (Exception e)
             {
                 throw;
             }
         }
-       public void Archiving(long Id)
+        public UserNotesResponse Archiving(long Id)
         {
             try
             {
-                this.notesRL.Archiving(Id);
+                return this.notesRL.Archiving(Id);
             }
             catch (Exception e)
             {
                 throw;
             }
         }
+        public UserNotesResponse UpdateImage(long Note_Id, string _Path)
+        {
+            try
+            {
+                return this.notesRL.UpdateImage(Note_Id, _Path);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public UserNotesResponse NotesDataWithId(long User_Id)
+        {
+            try
+            {
+                return this.notesRL.NotesDataWithId( User_Id);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+        public UserNotesResponse GetingleNoteWithId(long notesId, long jwtUserId)
+        {
+            try
+            {
+                return this.notesRL.GetingleNoteWithId( notesId ,jwtUserId);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
     }
 }

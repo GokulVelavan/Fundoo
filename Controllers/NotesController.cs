@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using RepositaryLayer.Entity;
 
 namespace Fundoo3.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class NotesController : ControllerBase
     {
         INotesBL notesBL;
@@ -25,6 +25,11 @@ namespace Fundoo3.Controllers
             this.notesBL = notesBL;
            environment = _environment;
         }
+        /// <summary>
+        /// Creating the Notes
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
         [HttpPost]
         public IActionResult AddingNotes([FromForm]UserNotes notes)
         {
@@ -45,11 +50,11 @@ namespace Fundoo3.Controllers
                         
                     }
                 }
-                
-                if (this.notesBL.AddNotes(notes,  jwtUserId, environment.WebRootPath + "\\Upload\\" + notes.Image.FileName))
+                var Note_Data = this.notesBL.AddNotes(notes, jwtUserId, environment.WebRootPath + "\\Upload\\" + notes.Image.FileName);
+                if (Note_Data != null)
                 {
                     var som = notes.Image.OpenReadStream();
-                    return this.Ok(new { Success = true, message = "Notes added"  });
+                    return this.Ok(new { Success = true, message = "Note is successfully added",Note_Data  });
                     
                 }
                 else
@@ -70,7 +75,6 @@ namespace Fundoo3.Controllers
             var data = await notesBL.NotesData();
             try
             {
-
                 return this.Ok(new { Success = true, message = "Notes Fetched Successful", data });
             }
             catch (Exception e)
@@ -84,8 +88,9 @@ namespace Fundoo3.Controllers
         {
             try
             {
-                notesBL.DeleteNote(Id);
-                return Ok(new { Success = true, message = "Notes deleted Successful" });
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);//Autharize User Id taken from JWT Claims
+                notesBL.DeleteNote(Id,jwtUserId);
+                return Ok(new { Success = true, message = "Note deleted Successful" });
             }
             catch (Exception e)
             {
@@ -113,9 +118,12 @@ namespace Fundoo3.Controllers
         {
             try
             {
-                this.notesBL.ChangeColor(color, Id);       
-               
-                return Ok(new { Success = true, message = "Color Updated" });
+               var Note_Data= this.notesBL.ChangeColor( Id,color);
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = "Color Updated",Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
+
             }
             catch (Exception)
             {
@@ -128,9 +136,12 @@ namespace Fundoo3.Controllers
         {
             try
             {
-                this.notesBL.Trashing(Id);
+                var Note_Data = this.notesBL.Trashing(Id);
+                if(Note_Data!=null )
+                return Ok(new { Success = true, message = " Operation is Updated",  Note_Data  });
+                else
+                 return this.BadRequest(new { Success = false });
 
-                return Ok(new { Success = true, message = " Operation is Updated" });
             }
             catch (Exception)
             {
@@ -144,9 +155,11 @@ namespace Fundoo3.Controllers
         {
             try
             {
-                this.notesBL.Pinning(Id);
-
-                return Ok(new { Success = true, message = " Operation is Updated" });
+               var Note_Data= this.notesBL.Pinning(Id);
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = " Operation is Updated", Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
             }
             catch (Exception)
             {
@@ -159,9 +172,12 @@ namespace Fundoo3.Controllers
         {
             try
             {
-                this.notesBL.Archiving(Id);
+               var Note_Data= this.notesBL.Archiving(Id);
 
-                return Ok(new { Success = true, message = " Operation is updated" });
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = " Operation is Updated", Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
             }
             catch (Exception)
             {
@@ -169,6 +185,66 @@ namespace Fundoo3.Controllers
 
             }
         }
+        [HttpPut("Image")]
+        public IActionResult Update_Image_Notes(long Id,IFormFile Image)
+        {
+            try
+            {
+                var path = Image.OpenReadStream().ToString();
+                var Note_Data = this.notesBL.UpdateImage(Id, path);
+
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = " Operation is Updated", Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
+            }
+            catch(Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+        [HttpGet("NotesOfUser")]
+        public IActionResult Get_Notes_of_User()
+        {
+            try
+            {
+
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);//Autharize User Id taken from JWT Claims
+                var Note_Data = this.notesBL.NotesDataWithId(jwtUserId);
+
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = " Operation is Updated", Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+        [HttpGet("SingleNoteOfUser")]
+        public IActionResult Get_Note_of_User(long Note_Id)
+        {
+            try
+            {
+
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);//Autharize User Id taken from JWT Claims
+                var Note_Data = this.notesBL.GetingleNoteWithId(Note_Id,jwtUserId);
+
+                if (Note_Data != null)
+                    return Ok(new { Success = true, message = " Operation is Updated", Note_Data });
+                else
+                    return this.BadRequest(new { Success = false });
+            }
+            catch (Exception)
+            {
+                return this.BadRequest(new { Success = false });
+
+            }
+        }
+
     }
 }
  
